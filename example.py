@@ -32,8 +32,8 @@ irc = IRC(ip, port, nick, channels, ident = ident, realname = realname,
 @irc.Handler('PRIVMSG')
 def handle_privmsg(irc, hostmask, args):
     channel = args[0]
-    args = args[-1][1:].split(' ')
-    cmd = args[0].lower()
+    text = args[-1][1:].split(' ')
+    cmd = text[0].lower()
     # Unprefixed commands here
     if cmd.startswith("meep"):
         irc.msg(channel, "Meep™!")
@@ -41,16 +41,17 @@ def handle_privmsg(irc, hostmask, args):
         # Prefixed commands
         cmd = cmd[1:]
         if cmd == 'yay':
-            irc.msg(channel, "\u200bYay!")
+            irc.msg(channel, '\u200bYay!')
         elif cmd == 'rev':
-            if len(args) > 1:
-                irc.msg(channel, "{}: {}".format(hostmask[0], ' '.join(args[1:])[::-1]))
+            if len(text) > 1:
+                irc.msg(channel, "{}: {}".format(hostmask[0],
+                    ' '.join(text[1:])[::-1]))
             else:
-                irc.msg(channel, "Invalid syntax! Syntax: <rev <string>")
+                irc.msg(channel, 'Invalid syntax! Syntax: ' + prefix +
+                    'rev <string>')
         elif cmd == 'about':
-            irc.msg(channel, 'I am {}, an example miniirc bot.'.format(irc.nick))
-        elif print_cmds and cmd != '':
-            print(' '.join(args)[1:])
+            irc.msg(channel,
+                'I am {}, an example miniirc bot.'.format(irc.nick))
 
 # Connect
 irc.connect()
