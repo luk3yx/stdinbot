@@ -6,7 +6,7 @@
 # © 2018 by luk3yx
 #
 
-import os, socket, sys, atexit
+import os, socket, sys, atexit, time
 from miniirc import IRC
 
 # Variables
@@ -40,5 +40,6 @@ def handle_stdin(irc, hostmask, args):
         if line == '\x04':
             return irc.disconnect(qmsg)
         irc.msg(channels[0], line)
+        time.sleep(1]
 
 irc.connect()
