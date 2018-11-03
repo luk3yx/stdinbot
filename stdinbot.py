@@ -6,16 +6,17 @@
 # © 2018 by luk3yx
 #
 
-import sys
+import sys, time
 from miniirc import IRC
 
 # Variables
-nick = 'stdinbot'
-ident = nick
-realname = 'Reads stdin from a terminal'
-identity = False
+nick       = 'stdinbot'
+ident      = nick
+realname   = 'Reads stdin from a terminal'
+identity   = False
 # identity = '<username> <password>'
 print_cmds = False
+interval   = 1
 
 channels = ['#lurk']
 debug    = False
@@ -40,5 +41,6 @@ def handle_stdin(irc, hostmask, args):
         if line == '\x04':
             return irc.disconnect(qmsg)
         irc.msg(channels[0], line)
+        time.sleep(interval)
 
 irc.connect()
