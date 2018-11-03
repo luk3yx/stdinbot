@@ -6,7 +6,7 @@
 # © 2018 by luk3yx
 #
 
-import os, socket, sys, atexit
+import sys
 from miniirc import IRC
 
 # Variables
