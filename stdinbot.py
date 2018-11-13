@@ -16,7 +16,7 @@ realname   = 'Reads stdin from a terminal'
 identity   = False
 # identity = '<username> <password>'
 print_cmds = False
-interval   = 1
+interval   = 0.25
 
 channels = ['#lurk']
 debug    = False
