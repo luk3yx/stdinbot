@@ -11,5 +11,3 @@ The miniirc framework is now on a separate repo
 [GitHub](https://github.com/luk3yx/miniirc))
 and can be installed via pip
 with `sudo -H pip3 install miniirc`.
-
-Eventually, the `miniirc.py` file in this repo will disappear entirely.
