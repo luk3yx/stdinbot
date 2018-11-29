@@ -1,6 +1,15 @@
 # stdinbot
 
+A collection of miniirc bots.
+
+## stdinbot.py
+
 A stupidly simple IRC bot to interact with stdin.
+
+## example.py
+
+An example miniirc bot. If you want to make your own bot, you can use this as
+the base.
 
 # miniirc
 
