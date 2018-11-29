@@ -11,6 +11,10 @@ A stupidly simple IRC bot to interact with stdin.
 An example miniirc bot. If you want to make your own bot, you can use this as
 the base.
 
+## relay.py
+
+A miniirc-based relay bot. Edit the networks list before using.
+
 # miniirc
 
 A simple IRC client framework.
