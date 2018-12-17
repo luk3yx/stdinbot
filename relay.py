@@ -17,7 +17,9 @@ networks = {
 #       'ip':       'irc.servers.ip',
 #       'port':     6697,
 #       'nick':     'testing-relay',
-#       '#channel': 'local-routing-name',
+#       'ignored':  {'lowercase-identifier'}, # Matched against nick, ident
+#       '#channel': 'local-routing-name',     #     and host.
+#   },
 }
 
 # Format strings
@@ -69,6 +71,12 @@ def parse_networks():
         channels = set()
         for channel in network:
             if is_channel(channel):
+                lchan = channel.lower()
+                if channel != lchan:
+                    network[lchan] = network[channel]
+                    del network[channel]
+                    channel = lchan
+                del lchan
                 channels.add(channel)
                 id = network[channel]
                 if id not in relayed:
@@ -84,6 +92,17 @@ def parse_networks():
             _ircs[network[IRC]] = name
     print('Done.', file=sys.stderr)
 
+# Check to see if a user is ignored.
+def is_ignored(hostmask, network):
+    if not networks.get(network) or not networks[network].get('ignored'):
+        return
+    for name in hostmask:
+        if name.lower() in networks[network]['ignored']:
+            networks[network][IRC].debug('Ignoring message from ' +
+                repr(hostmask))
+            return True
+    return False
+
 # Send a message to networks
 def relay_message(irc, msg, channel = None):
     if not msg:
@@ -91,6 +110,7 @@ def relay_message(irc, msg, channel = None):
     network = _ircs.get(irc)
 
     if channel:
+        channel = channel.lower()
         irc.debug('Sending message from', channel, 'on', network)
         if not is_channel(channel) or channel not in networks[network]:
             return
@@ -117,6 +137,8 @@ def handle_privmsg(irc, hostmask, args):
     text = args[-1][1:]
     msg = None
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
 
     if text == '\x01ACTION\x01' or (text.startswith('\x01ACTION ')
       and text.endswith('\x01')):
@@ -132,6 +154,8 @@ def handle_privmsg(irc, hostmask, args):
 @miniirc.Handler('JOIN')
 def handle_join(irc, hostmask, args):
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
     if net:
         msg = formatstrings['JOIN'].format(host=hostmask, network=net)
         relay_message(irc, msg, args[0][1:] if args[0].startswith(':') else
@@ -141,6 +165,8 @@ def handle_join(irc, hostmask, args):
 @miniirc.Handler('PART')
 def handle_part(irc, hostmask, args):
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
     if net:
         msg = formatstrings['PART'].format(host=hostmask, network=net,
             msg=args[-1][1:])
@@ -150,6 +176,8 @@ def handle_part(irc, hostmask, args):
 @miniirc.Handler('KICK')
 def handle_part(irc, hostmask, args):
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
     if net:
         msg = formatstrings['KICK'].format(victim=args[-2], network=net,
             kicker=hostmask[0], msg=args[-1][1:])
@@ -159,6 +187,8 @@ def handle_part(irc, hostmask, args):
 @miniirc.Handler('QUIT')
 def handle_quit(irc, hostmask, args):
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
     if net:
         msg = formatstrings['QUIT'].format(host=hostmask, network=net,
             msg=args[-1][1:] if len(args) > 0 else '')
@@ -168,6 +198,8 @@ def handle_quit(irc, hostmask, args):
 @miniirc.Handler('NICK')
 def handle_quit(irc, hostmask, args):
     net = _ircs.get(irc)
+    if is_ignored(hostmask, net):
+        return
     if net:
         msg = formatstrings['NICK'].format(host=hostmask, network=net,
             newnick=args[0])
