@@ -15,6 +15,13 @@ the base.
 
 A miniirc-based relay bot. Edit the networks list before using.
 
+## minetest-trackr.py
+
+Made for IRC channels with lots of Minetest servers, where only Minetest servers
+are voiced, and will allow IRC users to run `.players` to get a list of players
+on all the servers without flooding the channel (as badly as requesting a player
+list from every server). Currently not cross-channel and will ignore devoices.
+
 # miniirc
 
 A simple IRC client framework.
