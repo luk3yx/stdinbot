@@ -52,7 +52,7 @@ def _handle_privmsg(irc, hostmask, args):
     if msg.startswith('<'):
         n = msg.split(' ', 1)
         if len(n) > 1 and n[0].endswith('>') and (n[0][1].isalnum() or
-          n[0].startswith('\x03')):
+          n[0][1] == '\x03'):
             nick = '{}@{}'.format(n[0][1:-1], nick)
             msg  = n[1].strip()
 
