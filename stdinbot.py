@@ -13,7 +13,7 @@ from miniirc import IRC
 nick       = 'stdinbot'
 ident      = nick
 realname   = 'Reads stdin from a terminal'
-identity   = False
+identity   = None
 # identity = '<username> <password>'
 print_cmds = False
 interval   = 0.25
