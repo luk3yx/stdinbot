@@ -26,8 +26,8 @@ port = 6697
 
 # Welcome!
 print("Welcome to stdinbot!", file=sys.stderr)
-irc = IRC(ip, port, nick, channels, ident = ident, realname = realname,
-    ns_identity = identity, debug = debug, auto_connect = False)
+irc = IRC(ip, port, nick, channels, ident=ident, realname=realname,
+    ns_identity=identity, debug=debug, auto_connect=False)
 
 # Read stdin
 @irc.Handler('001')
@@ -43,4 +43,5 @@ def handle_stdin(irc, hostmask, args):
         irc.msg(channels[0], line)
         time.sleep(interval)
 
-irc.connect()
+if __name__ == '__main__':
+    irc.connect()
