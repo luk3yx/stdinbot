@@ -22,6 +22,42 @@ are voiced, and will allow IRC users to run `.players` to get a list of players
 on all the servers without flooding the channel (as badly as requesting a player
 list from every server). Currently not cross-channel and will ignore devoices.
 
+## lua.py
+
+A wrapper around [lupa](https://github.com/scoder/lupa) to make creating
+miniirc bots with lua easier. This may move eventually.
+
+Dependencies: `sudo pip3 install lupa>=1.8 miniirc_extras miniirc>=1.4.0`
+
+### Usage
+
+```
+./lua.py <path to lua file>
+```
+
+This lua file will be able to use the `miniirc` global variable. `IRC` objects
+are not called with `:` (`irc.msg(...)` instead of `irc:msg(...)`). *Remember
+that lua table indexes start with 1 and not 0.*
+
+#### `await`
+
+Handlers are executed inside coroutines and an `await` function is created, so
+that Python functions can be called without blocking the lua thread. The main
+lua file can return a function that will be called inside a coroutine.
+
+```lua
+await(blocking_python_function, parameters)
+await{blocking_python_function, parameters, keyword='argument'}
+```
+
+*Note: `await`ing a lua function is pointless and will still block the lua
+thread.*
+
+#### `sleep`
+
+The same syntax as `time.sleep`, doesn't block the lua thread if called inside
+a coroutine.
+
 # miniirc
 
 A simple IRC client framework.
