@@ -104,7 +104,7 @@ def is_ignored(hostmask, network):
     return False
 
 # Send a message to networks
-def relay_message(irc, msg, channel = None):
+def relay_message(irc, msg, channel=None):
     if not msg:
         return
     network = _ircs.get(irc)
@@ -132,9 +132,9 @@ def relay_message(irc, msg, channel = None):
 
 
 # Handle PRIVMSGs
-@miniirc.Handler('PRIVMSG')
+@miniirc.Handler('PRIVMSG', colon=False)
 def handle_privmsg(irc, hostmask, args):
-    text = args[-1][1:]
+    text = args[-1]
     msg = None
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
@@ -151,51 +151,50 @@ def handle_privmsg(irc, hostmask, args):
     relay_message(irc, msg, args[0])
 
 # Handle JOINs
-@miniirc.Handler('JOIN')
+@miniirc.Handler('JOIN', colon=False)
 def handle_join(irc, hostmask, args):
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
         return
     if net:
         msg = formatstrings['JOIN'].format(host=hostmask, network=net)
-        relay_message(irc, msg, args[0][1:] if args[0].startswith(':') else
-            args[0])
+        relay_message(irc, msg, args[0])
 
 # Handle PARTs
-@miniirc.Handler('PART')
+@miniirc.Handler('PART', colon=False)
 def handle_part(irc, hostmask, args):
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
         return
     if net:
         msg = formatstrings['PART'].format(host=hostmask, network=net,
-            msg=args[-1][1:])
+            msg=args[-1])
         relay_message(irc, msg, args[0])
 
 # Handle PARTs
-@miniirc.Handler('KICK')
+@miniirc.Handler('KICK', colon=False)
 def handle_part(irc, hostmask, args):
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
         return
     if net:
         msg = formatstrings['KICK'].format(victim=args[-2], network=net,
-            kicker=hostmask[0], msg=args[-1][1:])
+            kicker=hostmask[0], msg=args[-1])
         relay_message(irc, msg, args[0])
 
 # Handle QUITs
-@miniirc.Handler('QUIT')
+@miniirc.Handler('QUIT', colon=False)
 def handle_quit(irc, hostmask, args):
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
         return
     if net:
         msg = formatstrings['QUIT'].format(host=hostmask, network=net,
-            msg=args[-1][1:] if len(args) > 0 else '')
+            msg=args[-1] if args else '')
         relay_message(irc, msg)
 
 # Handle NICKs
-@miniirc.Handler('NICK')
+@miniirc.Handler('NICK', colon=False)
 def handle_quit(irc, hostmask, args):
     net = _ircs.get(irc)
     if is_ignored(hostmask, net):
