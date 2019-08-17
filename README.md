@@ -22,6 +22,17 @@ are voiced, and will allow IRC users to run `.players` to get a list of players
 on all the servers without flooding the channel (as badly as requesting a player
 list from every server). Currently not cross-channel and will ignore devoices.
 
+# Python scripts/applications that aren't strictly bots
+
+## miniirc_bootstrap.py
+
+Automatically installs pip (if required) and then runs
+`pip install --upgrade miniirc`. This should work if `pip` isn't in your PATH
+or if the `pip` in your PATH is for a different Python version.
+
+**You do not need this if you already have and know how to install packages
+with pip.**
+
 ## lua.py
 
 A wrapper around [lupa](https://github.com/scoder/lupa) to make creating
