@@ -65,12 +65,9 @@ def bootstrap_distutils():
 
         # Extract the downloaded .deb file.
         print('[This should never happen] Installing distutils...')
-        subprocess.check_call(('ar', 'x', '--', files[0]), cwd=tmpdir)
+        subprocess.check_call(('dpkg-deb', '-x', files[0], tmpdir), cwd=tmpdir)
 
         files = glob.glob(os.path.join(glob.escape(tmpdir), 'data.tar*'))
-        assert len(files) == 1, 'Error extracting .deb!'
-        with tarfile.open(files[0], 'r') as tarf:
-            tarf.extractall(tmpdir)
 
         # Move distutils out of the extracted package.
         f = os.path.join(tmpdir, 'usr', 'lib', python, 'distutils')
