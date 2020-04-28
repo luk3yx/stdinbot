@@ -32,7 +32,6 @@ def bootstrap_distutils():
     Bootstrap installs distutils on Debian systems. This is horrible and should
     probably be avoided if possible.
     """
-    import glob, tarfile
     if importlib.util.find_spec('distutils.util') is not None:
         return
 
@@ -66,8 +65,6 @@ def bootstrap_distutils():
         # Extract the downloaded .deb file.
         print('[This should never happen] Installing distutils...')
         subprocess.check_call(('dpkg-deb', '-x', files[0], tmpdir), cwd=tmpdir)
-
-        files = glob.glob(os.path.join(glob.escape(tmpdir), 'data.tar*'))
 
         # Move distutils out of the extracted package.
         f = os.path.join(tmpdir, 'usr', 'lib', python, 'distutils')
@@ -143,7 +140,7 @@ def bootstrap_pip():
         f.write(pip)
     del pip
 
-    subprocess.call((sys.executable, '--', filename, '--user'))
+    subprocess.check_call((sys.executable, '--', filename, '--user'))
     os.remove(filename)
 
     print('pip (should be) installed!')
