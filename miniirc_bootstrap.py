@@ -32,7 +32,8 @@ def bootstrap_distutils():
     Bootstrap installs distutils on Debian systems. This is horrible and should
     probably be avoided if possible.
     """
-    if importlib.util.find_spec('distutils.util') is not None:
+    if (importlib.util.find_spec('distutils.util') is not None and
+            sys.version_info < (3, 12)):
         return
 
     print('[This should never happen] Downloading distutils...')
