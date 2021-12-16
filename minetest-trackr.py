@@ -1,7 +1,9 @@
 #!/usr/bin/python3
-
 #
 # Minetest player tracker
+# This is the deprectated version 1 code, please visit
+# https://gitlab.com/luk3yx/minetest-trackr or
+# https://github.com/luk3yx/minetest-trackr for the latest version.
 #
 # © 2018 by luk3yx
 #
